@@ -1,0 +1,20 @@
+{
+    "name": "Test To-Do list from IIsovaII",
+    "tasks":[
+        {
+            "name": "task1",
+            "status": "done",
+            "description": "This is first task in this TO-DO list"
+        },
+        {
+            "name": "task2",
+            "status": "not done",
+            "description": "This is secon task in this TO-DO list. There are many symbols here: sdjhfshfpsdofsjfpodsjfo ыщвшарвышразывра09263730480-dfs"
+        },
+        {
+            "name": "task with many symbols: dshnfspihfpishdpofsjo[fjsodfjso[jfodsjo[fsjofj038423809eujdieu ШВРАЫОЗАОДЫОАЖДВОАЫОвшоазвыо ощвоазыаов200ыд0а",
+            "status": "not done",
+            "description": "This is secon task in this TO-DO list. There are many symbols here: sdjhfshfpsdofsjfpodsjfo ыщвшарвышразывра09263730480-dfs"
+        }
+    ]
+}

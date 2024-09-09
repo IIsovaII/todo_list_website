@@ -1,0 +1,35 @@
+{
+    "name": "Test To-Do list",
+    "groups": [
+        {
+            "name": "group-1",
+            "color": "#A8C9F0", 
+            "tasks": [
+                {
+                    "name": "task-1",
+                    "description": "This is test task in the first blue group",
+                    "done": "false",
+                    "id": "1"
+                },
+                {
+                    "name": "task-2",
+                    "description": "This is test task in the first blue group",
+                    "done": "true",
+                    "id": "2"
+                }
+            ]
+        },
+        {
+            "name": "group-2",
+            "color": "#dd72a6", 
+            "tasks": [
+                {
+                    "name": "task-1",
+                    "description": "This is test task in the second bredlue group",
+                    "done": "false",
+                    "id": "3"
+                }
+            ]
+        }
+    ]
+}
