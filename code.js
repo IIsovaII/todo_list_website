@@ -10,31 +10,47 @@ function onReadLoad(event) {
     let data = JSON.parse(event.target.result);
     jsonData = data;
 
-    main_workplace();
+    mainWorkplace();
 }
 
-function newList() { } // ?
+function newList() {
+    jsonData = {
+        name: "New TO-DO list.",
+        tasks: []
+    }
+
+    mainWorkplace();
+}
 
 function saveTaskFunc() {
-    //
+    const blob = new Blob([JSON.stringify(jsonData, null, 2)], {
+        type: 'application/json',
+    });
+
+    let a = document.createElement('a');
+    let url = URL.createObjectURL(blob);
+    a.href = url;
+    a.download = `${jsonData.name}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
 }
 
 function addTaskFunc() {
     let newTask = {}
-    
+
     newTask.name = prompt('Task name.', "new task");
     newTask.description = prompt('Task description.', "");
     newTask.id = jsonData.tasks.length;
 
     jsonData.tasks.push(newTask);
 
-    main_workplace();
+    mainWorkplace();
 }
 
 function editTaskFunc(id, name, desc) {
     jsonData.tasks[id].name = name;
     jsonData.tasks[id].description = desc;
-    main_workplace();
+    mainWorkplace();
 }
 
 function editTaskModal(id) {
@@ -45,7 +61,7 @@ function editTaskModal(id) {
 
 function delTaskFunc(id) {
     jsonData.tasks.splice(id, 1);
-    main_workplace();
+    mainWorkplace();
 }
 
 function delTaskFuncModal(id) {
@@ -53,104 +69,60 @@ function delTaskFuncModal(id) {
     if (delQ == true) delTaskFunc(id);
 }
 
-/*function delTaskFuncModal() {
-    // modal
-    let delModal = document.createElement("div");
-    delModal.className = "modal fade";
-    delModal.tabIndex = "-1";
 
-    // modal -> modal-dialog
-    let delModalDialog = document.createElement("div");
-    delModalDialog.className = "modal-dialog";
-    delModal.appendChild(delModalDialog);
-
-    // modal-dialog -> modal-content
-    let delModalContent = document.createElement("div");
-    delModalContent.className = "modal-content";
-
-    // modal-content -> header
-    let header = document.createElement("div");
-    header.className = "modal-header";
-    header.innerHTML = `<h5 class="modal-title">Delete</h5><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>`;
-    delModalContent.appendChild(header);
-
-    // modal-content -> body
-    let body = document.createElement("div");
-    body.className = "modal-body";
-    body.innerHTML = "<p>Are you sure you want to delete this task?</p>";
-    delModalContent.appendChild(body);
-
-    // modal-content -> footer
-    let footer = document.createElement("div");
-    footer.className = "modal-footer";
-
-    // footer -> close
-    let closeBtn = document.createElement("button");
-    closeBtn.type = "button";
-    closeBtn.className = "btn btn-secondary";
-    closeBtn["data-bs-dismiss"] = "modal";
-    closeBtn.innerText = "Cancel";
-    footer.appendChild(closeBtn);
-
-    // footer -> ok
-    let okBtn = document.createElement("button");
-    okBtn.type = "button";
-    okBtn.className = "btn btn-primary";
-    closeBtn.addEventListener("click", delTaskFunc);
-    closeBtn.innerText = "Ok";
-    footer.appendChild(okBtn);
-
-    delModalContent.appendChild(footer);
-    delModalDialog.appendChild(delModalContent);
-
-    // нужно добавить модальное окно на страницу - оно будет появлять только по нажатию кнопки
-    // id +
-    // кнопку вызова переделать согласно id
-    return delModal;
-}*/
-
-function changeStatus() {
-    //
+function changeStatus(id) {
+    jsonData.tasks[id].status = jsonData.tasks[id].status == "done" ? "not done" : "done";
+    mainWorkplace();
 }
 
-// можно передавать целый таск
 let oneTaskButtons = (id) => {
     let btns = document.createElement("div");
 
     let editBtn = document.createElement("button");
+    editBtn.className = "btn btn-light";
     editBtn.innerHTML =
         '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pen" viewBox="0 0 16 16"><path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001m-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708z"/></svg>';
     editBtn.addEventListener("click", () => editTaskModal(id));
     btns.appendChild(editBtn);
 
     let delBtn = document.createElement("button");
+    delBtn.className = "btn btn-light";
     delBtn.innerHTML =
         '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16"><path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/></svg>';
     delBtn.addEventListener("click", () => delTaskFuncModal(id));
     btns.appendChild(delBtn);
-
-    //<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-    //   Launch demo modal
-    //   </button>
 
     return btns;
 };
 
 let oneTask = (element) => {
     let task = document.createElement("div");
+    task.className = "task";
 
-    let tytle = document.createElement("h3");
+    let statusBtn = document.createElement("button");
+    statusBtn.className = element.status == "done" ? "btn btn-success" : "btn btn-warning";
+    statusBtn.innerHTML = element.status == "done" ?
+        '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2" viewBox="0 0 16 16"><path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0"/></svg>'
+        :
+        '<svg width="16" height="16"></svg>'
+    statusBtn.addEventListener('click', () => { changeStatus(element.id) });
+    task.appendChild(statusBtn);
+
+    let txtContainer = document.createElement("span");
+    txtContainer.className = "txt-container";
+
+    let tytle = document.createElement("h5");
     tytle.innerText = element.name;
-    task.appendChild(tytle);
+    txtContainer.appendChild(tytle);
+
+    let desc = document.createElement("h7");
+    desc.innerText = element.description;
+    txtContainer.appendChild(desc);
+
+    task.appendChild(txtContainer);
 
     let task_buttons = oneTaskButtons(element.id);
     task.appendChild(task_buttons);
-
-    let desc = document.createElement("h5");
-    desc.innerText = element.description;
-    task.appendChild(desc);
-
-    let statusBtn = document.createElement("button");
 
     return task;
 };
@@ -159,32 +131,66 @@ function initial_buttons() {
     let workplace = document.getElementById("workplace");
     workplace.innerHTML = "";
 
-    let new_list_button = document.createElement("button");
-    new_list_button.innerText = "Create new list";
-    new_list_button.className = "btn";
+    let newListBtn = document.createElement("button");
+    newListBtn.innerText = "Create new list";
+    newListBtn.className = "btn";
+    newListBtn.addEventListener("click", newList)
 
-    let list_input = document.createElement("input");
-    list_input.addEventListener("change", inputHandler);
-    list_input.type = "file";
+    let listInput = document.createElement("input");
+    listInput.addEventListener("change", inputHandler);
+    listInput.type = "file";
 
-    workplace.appendChild(new_list_button);
-    workplace.appendChild(list_input);
+    workplace.appendChild(newListBtn);
+    workplace.appendChild(listInput);
 }
 
-let main_workplace = () => {
+let listButtons = () => {
+    let btnDiv = document.createElement("div");
+    btnDiv.className = "list-buttons";
+
+    let saveBtn = document.createElement('button')
+    saveBtn.innerText = "Save list";
+    saveBtn.className = "btn btn-primary"
+    saveBtn.addEventListener("click", saveTaskFunc);
+    btnDiv.appendChild(saveBtn);
+
+    let clearBtn = document.createElement('button')
+    clearBtn.innerText = "Clear list";
+    clearBtn.className = "btn btn-secondary"
+    clearBtn.addEventListener("click", newList);
+    btnDiv.appendChild(clearBtn);
+
+    return btnDiv;
+}
+
+let mainWorkplace = () => {
     let workplace = document.getElementById("workplace");
     workplace.innerHTML = "";
 
+    let lstBtns = listButtons();
+    workplace.appendChild(lstBtns);
+
+    let listTytle = document.createElement("div");
+    listTytle.className = "list-tytle";
+
+    let first = document.createElement('div');
+    listTytle.appendChild(first);
+
+    let listName = document.createElement("h3");
+    listName.className = "tytle";
+    listName.innerText = jsonData.name;
+    listTytle.appendChild(listName);
+
     let addBtn = document.createElement("button");
+    addBtn.className = "btn btn-light";
     addBtn.innerHTML =
-        '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16"><path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/></svg>';
+        '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2"/></svg>';
     addBtn.addEventListener("click", () => addTaskFunc());
     workplace.appendChild(addBtn);
+    listTytle.appendChild(addBtn);
 
-    let list_name = document.createElement("h2");
-    list_name.innerText = jsonData.name;
-    workplace.appendChild(list_name);
-
+    workplace.appendChild(listTytle);
+    
     let list = document.createElement("div");
     for (let i = 0; i < jsonData.tasks.length; i++) {
         jsonData.tasks[i].id = i;
@@ -195,4 +201,4 @@ let main_workplace = () => {
 };
 
 if (jsonData == null) initial_buttons();
-else main_workplace();
+else mainWorkplace();

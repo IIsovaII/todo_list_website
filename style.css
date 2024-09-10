@@ -1,0 +1,61 @@
+:root {
+    --bg-color: #c0c0c0;
+    --task-border-color: #c0c0c0;
+    --workplace_bg_color: #ffffff;
+}
+
+.list-buttons{
+    text-align: center;
+}
+
+.task {
+    display: flex;
+    margin-top: 8px;
+    align-items: center;
+    flex-direction: row;
+    justify-content: space-around;
+
+    border-radius: 8px;
+    border: solid 1px var(--task-border-color);
+
+    padding: 8px;
+}
+
+.txt-container {
+    width: 60vw;
+    word-break: break-all;
+}
+
+.list-tytle {
+    display: flex;
+
+    align-items: center;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.tytle {
+    width: 60vw;
+    word-break: break-all;
+}
+
+html,
+#body {
+    background-color: var(--bg-color);
+    overflow: hidden;
+}
+
+header {
+    border: none;
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+    background-color: var(--workplace_bg_color);
+}
+
+#workplace {
+    height: 95vh;
+    border: none;
+    background-color: var(--workplace_bg_color);
+    /* text-align: center; */
+    padding-top: 16px;
+}
