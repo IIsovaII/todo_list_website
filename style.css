@@ -22,6 +22,8 @@
 }
 
 .txt-container {
+    padding-left: 8px;
+    padding-right: 8px;
     width: 60vw;
     word-break: break-all;
 }
@@ -35,6 +37,8 @@
 }
 
 .tytle {
+    padding-left: 8px;
+    padding-right: 8px;
     width: 60vw;
     word-break: break-all;
 }

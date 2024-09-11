@@ -14,12 +14,16 @@ function onReadLoad(event) {
 }
 
 function newList() {
-    jsonData = {
-        name: "New TO-DO list",
-        tasks: []
-    }
+    let newListName = prompt('Enter the TO-DO list name: ', "New TO-DO list");
+    if (newListName != null){
+        jsonData = {
+            name: `${newListName}`,
+            tasks: []
+        }
 
-    mainWorkplace();
+        mainWorkplace();
+    }
+    
 }
 
 function saveTaskFunc() {
@@ -38,7 +42,7 @@ function saveTaskFunc() {
 function addTaskFunc() {
     let newTask = {}
 
-    newTask.name = prompt('Task name.', "new task");
+    newTask.name = prompt('Task name.', "New task");
     newTask.description = prompt('Task description.', "");
     newTask.id = jsonData.tasks.length;
     newTask.status = "not done";
