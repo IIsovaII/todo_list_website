@@ -59,3 +59,12 @@ header {
     /* text-align: center; */
     padding-top: 16px;
 }
+
+input[type=file]{
+    position: absolute;
+    z-index: -1;
+    left: 0;
+    top: 0;
+    width: 0;
+    height: 0;
+}

@@ -15,7 +15,7 @@ function onReadLoad(event) {
 
 function newList() {
     jsonData = {
-        name: "New TO-DO list.",
+        name: "New TO-DO list",
         tasks: []
     }
 
@@ -41,6 +41,7 @@ function addTaskFunc() {
     newTask.name = prompt('Task name.', "new task");
     newTask.description = prompt('Task description.', "");
     newTask.id = jsonData.tasks.length;
+    newTask.status = "not done";
 
     jsonData.tasks.push(newTask);
 
@@ -130,18 +131,36 @@ let oneTask = (element) => {
 function initial_buttons() {
     let workplace = document.getElementById("workplace");
     workplace.innerHTML = "";
+    workplace.style.display = "flex";
+    workplace.style.flexDirection = "column"
+    workplace.style.alignItems = "center";
 
     let newListBtn = document.createElement("button");
     newListBtn.innerText = "Create new list";
-    newListBtn.className = "btn";
+    newListBtn.className = "btn btn-lg btn-outline btn-outline-dark";
     newListBtn.addEventListener("click", newList)
 
+    
     let listInput = document.createElement("input");
     listInput.addEventListener("change", inputHandler);
     listInput.type = "file";
+    listInput.accept = ".json";
+    listInput.id = "json-input";
+
+    let inputBtn = document.createElement("span");
+    inputBtn.innerText = "Add json";
+    inputBtn.className = "btn btn-lg btn-outline btn-outline-dark";
+
+    inputBtn.onclick = (event) => {
+        document.getElementById("json-input").click();
+    }
+
+
 
     workplace.appendChild(newListBtn);
+    workplace.appendChild(document.createTextNode("OR"));
     workplace.appendChild(listInput);
+    workplace.appendChild(inputBtn);
 }
 
 let listButtons = () => {
@@ -152,12 +171,16 @@ let listButtons = () => {
     saveBtn.innerText = "Save list";
     saveBtn.className = "btn btn-primary"
     saveBtn.addEventListener("click", saveTaskFunc);
+    saveBtn.style.marginRight = "8px";
     btnDiv.appendChild(saveBtn);
 
     let clearBtn = document.createElement('button')
     clearBtn.innerText = "Clear list";
     clearBtn.className = "btn btn-secondary"
-    clearBtn.addEventListener("click", newList);
+    clearBtn.addEventListener("click", () => {
+        jsonData = null;
+        initial_buttons();
+    });
     btnDiv.appendChild(clearBtn);
 
     return btnDiv;
